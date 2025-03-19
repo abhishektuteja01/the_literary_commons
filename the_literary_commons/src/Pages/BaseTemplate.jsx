@@ -30,7 +30,6 @@ function NavBar() {
           <Nav>
             <Nav.Link href="/">Home</Nav.Link>
             <Nav.Link href="/donatepage">Donate a Book</Nav.Link>
-            <Nav.Link href="/bookdetails">Book Details</Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Container>

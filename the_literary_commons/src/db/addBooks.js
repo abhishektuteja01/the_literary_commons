@@ -1,13 +1,14 @@
-// Import Firebase dependencies
-import { initializeApp } from "firebase/app";
-import { getFirestore, collection, addDoc } from "firebase/firestore/lite";
+// Used to create test data and update the availability status of books in the database
 
-// Firebase configuration (same as in your `MyFireStore.js`)
+import { getFirestore, collection, getDocs, updateDoc, doc, addDoc } from "firebase/firestore/lite";
+import { initializeApp } from "firebase/app";
+
+// Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyChewNij6icScPJCBp8uB_9QRU7RLvvqQ8",
   authDomain: "theliterarycommons.firebaseapp.com",
   projectId: "theliterarycommons",
-  storageBucket: "theliterarycommons.firebasestorage.app",
+  storageBucket: "theliterarycommons.firebaseapp.com",
   messagingSenderId: "339469816910",
   appId: "1:339469816910:web:f15f6fab23c65cf9911f1f"
 };
@@ -16,53 +17,69 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// List of books to add
+// Sample test data
 const books = [
-  { title: "To Kill a Mockingbird", author: "Harper Lee", genre: "Classic", condition: "Excellent" },
-  { title: "Pride and Prejudice", author: "Jane Austen", genre: "Romance", condition: "Good" },
-  { title: "The Great Gatsby", author: "F. Scott Fitzgerald", genre: "Classic", condition: "Like New" },
-  { title: "Moby-Dick", author: "Herman Melville", genre: "Adventure", condition: "Worn" },
-  { title: "Brave New World", author: "Aldous Huxley", genre: "Dystopian", condition: "Good" },
-  { title: "The Catcher in the Rye", author: "J.D. Salinger", genre: "Fiction", condition: "Fair" },
-  { title: "Crime and Punishment", author: "Fyodor Dostoevsky", genre: "Philosophical", condition: "Used" },
-  { title: "The Hobbit", author: "J.R.R. Tolkien", genre: "Fantasy", condition: "Like New" },
-  { title: "War and Peace", author: "Leo Tolstoy", genre: "Historical", condition: "Good" },
-  { title: "The Brothers Karamazov", author: "Fyodor Dostoevsky", genre: "Philosophical", condition: "Used" },
-  { title: "Frankenstein", author: "Mary Shelley", genre: "Horror", condition: "Fair" },
-  { title: "Dracula", author: "Bram Stoker", genre: "Horror", condition: "Good" },
-  { title: "The Picture of Dorian Gray", author: "Oscar Wilde", genre: "Philosophical", condition: "Like New" },
-  { title: "Fahrenheit 451", author: "Ray Bradbury", genre: "Dystopian", condition: "Excellent" },
-  { title: "Les Misérables", author: "Victor Hugo", genre: "Historical", condition: "Used" },
-  { title: "The Odyssey", author: "Homer", genre: "Epic", condition: "Worn" },
-  { title: "The Iliad", author: "Homer", genre: "Epic", condition: "Fair" },
-  { title: "The Count of Monte Cristo", author: "Alexandre Dumas", genre: "Adventure", condition: "Good" },
-  { title: "The Alchemist", author: "Paulo Coelho", genre: "Philosophical", condition: "Like New" },
-  { title: "The Road", author: "Cormac McCarthy", genre: "Post-Apocalyptic", condition: "Used" },
-  { title: "Jane Eyre", author: "Charlotte Brontë", genre: "Classic", condition: "Good" },
-  { title: "Wuthering Heights", author: "Emily Brontë", genre: "Classic", condition: "Excellent" },
-  { title: "One Hundred Years of Solitude", author: "Gabriel García Márquez", genre: "Magical Realism", condition: "Like New" },
-  { title: "The Grapes of Wrath", author: "John Steinbeck", genre: "Classic", condition: "Fair" },
-  { title: "Dune", author: "Frank Herbert", genre: "Science Fiction", condition: "Good" },
-  { title: "The Lord of the Rings", author: "J.R.R. Tolkien", genre: "Fantasy", condition: "Excellent" },
-  { title: "Catch-22", author: "Joseph Heller", genre: "Satire", condition: "Used" },
-  { title: "The Sun Also Rises", author: "Ernest Hemingway", genre: "Classic", condition: "Like New" },
-  { title: "The Stranger", author: "Albert Camus", genre: "Philosophical", condition: "Worn" },
-  { title: "Slaughterhouse-Five", author: "Kurt Vonnegut", genre: "Science Fiction", condition: "Good" }
+  { title: "The Silent Storm", author: "Emily Richards", genre: "Drama", condition: "New" },
+  { title: "Echoes of the Past", author: "James Oliver", genre: "Historical Fiction", condition: "Like New" },
+  { title: "Mystic Falls", author: "Sophia Grant", genre: "Fantasy", condition: "Good" },
+  { title: "The Last Cipher", author: "David West", genre: "Thriller", condition: "Used" },
+  { title: "A Tale of Two Souls", author: "Anna Caldwell", genre: "Romance", condition: "Fair" },
+  { title: "Beyond the Horizon", author: "Liam Carter", genre: "Adventure", condition: "Worn" },
+  { title: "The Cosmic Voyage", author: "Nathaniel Drake", genre: "Science Fiction", condition: "New" },
+  { title: "Secrets in the Fog", author: "Charlotte Monroe", genre: "Mystery", condition: "Like New" },
+  { title: "The Art of Deception", author: "Oliver Greene", genre: "Crime", condition: "Good" },
+  { title: "Distant Shores", author: "Isabella Harper", genre: "Romance", condition: "Used" },
+  { title: "Whispers of the Wind", author: "Lucas Evans", genre: "Drama", condition: "Fair" },
+  { title: "Fragments of Memory", author: "Sophia Adams", genre: "Historical Fiction", condition: "Worn" },
+  { title: "Parallel Worlds", author: "William Clarke", genre: "Science Fiction", condition: "New" },
+  { title: "Beneath the Surface", author: "Harper Lee", genre: "Thriller", condition: "Like New" },
+  { title: "Gates of Eternity", author: "Samuel Peterson", genre: "Fantasy", condition: "Good" },
+  { title: "The Time Traveler's Dilemma", author: "Olivia Knight", genre: "Science Fiction", condition: "Used" },
+  { title: "Fallen Kingdoms", author: "Benjamin Woods", genre: "Fantasy", condition: "Fair" },
+  { title: "Code Red", author: "Victoria Ellis", genre: "Thriller", condition: "Worn" },
+  { title: "Under the Crimson Sky", author: "Michael Foster", genre: "Drama", condition: "New" },
+  { title: "Lost in Translation", author: "Eleanor Sinclair", genre: "Romance", condition: "Like New" },
+  { title: "Echo Chamber", author: "Jonathan Reid", genre: "Mystery", condition: "Good" },
+  { title: "Infernal Secrets", author: "Catherine Moore", genre: "Horror", condition: "Used" },
+  { title: "Shadows of the Past", author: "Matthew Turner", genre: "Historical Fiction", condition: "Fair" },
+  { title: "Digital Nightmare", author: "Ryan Walker", genre: "Science Fiction", condition: "Worn" },
+  { title: "The Eternal Watch", author: "Rachel Adams", genre: "Fantasy", condition: "New" },
+  { title: "Winds of Change", author: "Henry Bennett", genre: "Drama", condition: "Like New" },
+  { title: "Memoirs of the Unknown", author: "Grace Anderson", genre: "Mystery", condition: "Good" },
+  { title: "Beyond Reality", author: "Ethan Williams", genre: "Science Fiction", condition: "Used" },
+  { title: "Through the Fire", author: "Sophia Campbell", genre: "Thriller", condition: "Fair" },
+  { title: "Labyrinth of Lies", author: "George Harrison", genre: "Mystery", condition: "Worn" },
+  { title: "Fading Footprints", author: "Jessica Coleman", genre: "Historical Fiction", condition: "New" },
+  { title: "Broken Vows", author: "Nathan Scott", genre: "Romance", condition: "Like New" },
+  { title: "Secrets of the Ancients", author: "Olivia Bennett", genre: "Fantasy", condition: "Good" },
+  { title: "Midnight Shadows", author: "Liam Edwards", genre: "Crime", condition: "Used" },
+  { title: "Neon Nights", author: "Chloe Morgan", genre: "Cyberpunk", condition: "Fair" },
+  { title: "The Lost Expedition", author: "Christopher Nolan", genre: "Adventure", condition: "Worn" },
+  { title: "Whispers in the Dark", author: "Amelia Foster", genre: "Horror", condition: "New" },
+  { title: "Echo of the Void", author: "Daniel Brooks", genre: "Science Fiction", condition: "Like New" },
+  { title: "Stormchasers", author: "Emily Taylor", genre: "Adventure", condition: "Good" },
+  { title: "The Forbidden City", author: "Robert Davis", genre: "Historical Fiction", condition: "Used" },
+  { title: "The Final Countdown", author: "Victoria Harris", genre: "Thriller", condition: "Fair" },
+  { title: "The Vanishing Point", author: "Benjamin Clark", genre: "Mystery", condition: "Worn" },
 ];
 
 // Function to add books to Firestore
-const addBooksToFirestore = async () => {
+async function addBooksToFirestore() {
   try {
     const booksCollection = collection(db, "books");
+
     for (const book of books) {
-      await addDoc(booksCollection, book);
-      console.log(`Added book: ${book.title}`);
+      const availability = Math.random() < 0.2 ? "Borrowed" : "Available";
+
+      await addDoc(booksCollection, { ...book, availability });
+      console.log(`Added book: ${book.title} (Availability: ${availability})`);
     }
-    console.log("All books added successfully!");
+
+    console.log("All test books added successfully!");
   } catch (error) {
     console.error("Error adding books:", error);
   }
-};
+}
 
 // Run the function
 addBooksToFirestore();

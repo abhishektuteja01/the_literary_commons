@@ -52,8 +52,21 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   text-align: center;
   transition: transform 0.2s ease-in-out;
+  display: flex;            /* Make it a flex container */
+  flex-direction: column;   /* Arrange items in a column */
+  justify-content: space-between; /* Distribute content */
+  height: 100%;             /* Ensure consistent height */
 }
 
+.availability-button {
+  background-color: white;
+  color: black;
+  padding: 10px;
+  border: 1px solid black;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: auto; /* Pushes the button to the bottom */
+}
 .book-card:hover {
   transform: scale(1.05);
 }
