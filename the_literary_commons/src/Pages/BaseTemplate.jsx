@@ -20,7 +20,7 @@ function NavBar() {
     <Navbar expand="lg" className="bg-body-tertiary">
       <Container>
         {/* Brand on the Left */}
-        <Navbar.Brand href="#home" className="ms-2">The Literary Commons</Navbar.Brand>
+        <Navbar.Brand href="/" className="ms-2">The Literary Commons</Navbar.Brand>
         
         {/* Navbar Toggle for Mobile */}
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -28,7 +28,7 @@ function NavBar() {
         {/* Navigation Links on the Right */}
         <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
           <Nav>
-            <Nav.Link href="/">Home</Nav.Link>
+            <Nav.Link href="/books">Home</Nav.Link>
             <Nav.Link href="/donatepage">Donate a Book</Nav.Link>
           </Nav>
         </Navbar.Collapse>
@@ -41,7 +41,7 @@ function Footer() {
   return (
     <footer className="bg-body-tertiary text-center text-lg-start">
       <div className="text-center p-3" style={{ backgroundColor: 'rgba(0, 0, 0, 0.2)' }}>
-        © 2021 The Literary Commons
+        © 2025 The Literary Commons
       </div>
     </footer>
   );

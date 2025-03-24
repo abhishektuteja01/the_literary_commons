@@ -46,6 +46,7 @@ export default function HomePage() {
     <BaseTemplate>
     <div style={{ backgroundColor: "rgb(26, 89, 112)", minHeight: "100vh" }}>
       <div className="homepage-container">
+        <h1 style={{color: "#FFFFFF"}}>Books</h1>
         <input 
           type="text" 
           placeholder="Search books..." 
@@ -53,7 +54,7 @@ export default function HomePage() {
           onKeyDown={handleSearch}
         />
         <br />
-        <h2>Books</h2>
+        
         <div className="book-list-container">
           <div className="book-list">
             {filteredBooks.length > 0 ? (

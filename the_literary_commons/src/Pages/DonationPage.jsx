@@ -16,6 +16,7 @@ export default function DonationPage() {
     setAuthor("");
     setGenre("");
     setCondition("");}
+    
   return (
     <BaseTemplate>
       <div style={{ backgroundColor: "rgb(26, 89, 112)", minHeight: "100vh" }}>

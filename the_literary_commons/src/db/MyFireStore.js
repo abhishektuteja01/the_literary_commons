@@ -60,7 +60,29 @@ function MyFireStoreDB() {
       console.error("Error deleting book:", error);
       return { success: false, message: "Failed to delete book." };
     }
-  }
+  };
+
+  myDB.addReview = async (id, review) => {
+    try {
+      const bookRef = doc(db, "books", id);
+    const bookSnap = await getDoc(bookRef);
+
+    if (!bookSnap.exists()) {
+      throw new Error("Book not found");
+    }
+
+    const currentReviews = bookSnap.data().reviews || [];
+
+    await updateDoc(bookRef, {
+      reviews: [...currentReviews, review]
+      });
+      console.log("Review added successfully!");
+      return { success: true, message: "Review added successfully!" };
+    }catch (error) {
+      console.error("Error adding review:", error);
+      return { success: false, message: "Failed to add review." };
+    }
+  }; 
 
   // Function to add a new book with "Available" status
   myDB.addBook = async (title, author, genre, condition) => {
