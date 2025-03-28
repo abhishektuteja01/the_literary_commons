@@ -91,10 +91,11 @@ firebase deploy
 ## 🔗 Resources
 
 - **GitHub Repository:** _[https://theliterarycommons.web.app/]_
-- **Figma Mockups:** _[Add link here]_
-- **Lucidchart Modules Diagram:** _[Add link here]_
-- **Live Website:** _[Add link here]_
-
+- **Figma Mockups:** _[https://www.figma.com/design/y1zEKwltMuQQTUcwoimJHq/The-Literary-Commons?node-id=0-1&t=M1hnUh1hNlHHuqSh-1]_
+- **Lucidchart Modules Diagram:** _[https://lucid.app/lucidchart/b2fa5783-b588-45e1-a7d7-d12d169067f6/edit?invitationId=inv_73781a5b-6e62-471f-8838-653222681788]_
+- **Live Website:** _[https://theliterarycommons.web.app/]_
+- **Youtube Video:** _[https://youtu.be/5tUMih0N1RA]_
+- 
 ---
 
 ## 🪪 License
